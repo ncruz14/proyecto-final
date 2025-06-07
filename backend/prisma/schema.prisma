@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  clientId  String   @unique @map("client_id") // ID del cliente (ej: 1234567)
+  name      String   @map("name")
+  address   String   @map("address")
+  phone     String?  @map("phone")
+  email     String?  @map("email")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relación con facturas
+  bills Bill[]
+
+  @@map("customers")
+}
+
+model Bill {
+  id             String     @id @default(uuid())
+  billNumber     String     @unique @map("bill_number") // Número de factura (ej: F-2025-02-12345)
+  customerId     String     @map("customer_id")
+  clientId       String     @map("client_id") // ID del cliente para búsquedas rápidas
+  period         String     @map("period") // Período de facturación (ej: Febrero 2025)
+  amount         Int        @map("amount") // Monto en centavos
+  dueDate        DateTime   @map("due_date") // Fecha de vencimiento
+  issueDate      DateTime   @map("issue_date") // Fecha de emisión
+  paymentDate    DateTime?  @map("payment_date") // Fecha de pago (null si no está pagada)
+  status         BillStatus @default(PENDING) @map("status")
+  receiptNumber  String?    @map("receipt_number") // Número de comprobante
+  consumption    Float?     @map("consumption") // Consumo en m³
+  previousReading Float?    @map("previous_reading") // Lectura anterior
+  currentReading Float?     @map("current_reading") // Lectura actual
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+
+  // Relación con cliente
+  customer Customer @relation(fields: [customerId], references: [id])
+
+  @@map("bills")
+}
+
+enum BillStatus {
+  PENDING
+  PAID
+  OVERDUE
+  CANCELLED
+}
