@@ -26,7 +26,7 @@ Backend API para la plataforma AguaPago - Sistema de consulta y gestión de fact
    npm run dev
    ```
 
-   El servidor estará disponible en `http://localhost:8000`
+   El servidor estará disponible en https://aguas-pago-backend.piddet.com`
 
 3. **Iniciar en modo producción**
    ```bash

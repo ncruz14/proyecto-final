@@ -65,8 +65,8 @@ function ConsultaContent() {
       if (isClientId) {
         setSearchType('client')
         const [customerResponse, billsResponse] = await Promise.all([
-          fetch(`http://localhost:8000/api/customers?clientId=${query}`),
-          fetch(`http://localhost:8000/api/billsByClient?clientId=${query}`)
+          fetch(`https://aguas-pago-backend.piddet.com/api/customers?clientId=${query}`),
+          fetch(`https://aguas-pago-backend.piddet.com/api/billsByClient?clientId=${query}`)
         ])
 
         if (customerResponse.ok && billsResponse.ok) {
@@ -80,13 +80,13 @@ function ConsultaContent() {
         }
       } else {
         setSearchType('bill')
-        const response = await fetch(`http://localhost:8000/api/bills?billNumber=${query}`)
+        const response = await fetch(`https://aguas-pago-backend.piddet.com/api/bills?billNumber=${query}`)
         
         if (response.ok) {
           const data = await response.json()
           setBill(data.data)
           
-          const customerResponse = await fetch(`http://localhost:8000/api/customers?clientId=${data.data.clientId}`)
+          const customerResponse = await fetch(`https://aguas-pago-backend.piddet.com/api/customers?clientId=${data.data.clientId}`)
           if (customerResponse.ok) {
             const customerData = await customerResponse.json()
             setCustomer(customerData.data)

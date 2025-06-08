@@ -58,14 +58,14 @@ function PagoContent() {
     setError(null)
 
     try {
-      const response = await fetch(`http://localhost:8000/api/bills?billNumber=${billNumber}`)
+      const response = await fetch(`https://aguas-pago-backend.piddet.com/api/bills?billNumber=${billNumber}`)
       
       if (response.ok) {
         const data = await response.json()
         setBill(data.data)
         
         // Obtener info del cliente
-        const customerResponse = await fetch(`http://localhost:8000/api/customers?clientId=${data.data.clientId}`)
+        const customerResponse = await fetch(`https://aguas-pago-backend.piddet.com/api/customers?clientId=${data.data.clientId}`)
         if (customerResponse.ok) {
           const customerData = await customerResponse.json()
           setCustomer(customerData.data)
